@@ -53,12 +53,17 @@ get "/author/:id" do |env|
 end
 
 put "/author/:id" do |env|
-  if env.params.json.has_key?("name") || env.params.json.has_key?("nationality")
-    db.exec "UPDATE `author` SET `name`=? WHERE `id`=?", env.params.json["name"], env.params.url["id"]
+  author_id = env.params.url["id"]
+  author = db.query_one? "SELECT * FROM `author` WHERE `id` = ?", author_id, as:{Int32, String, String}
+
+  if author
+    name = env.params.json.has_key?("name") ? env.params.json["name"] : author[1]
+    puts name
+    nationality = env.params.json.has_key?("nationality") ? env.params.json["nationality"] : author[1]
+    db.exec "UPDATE `author` SET `name` = ?, `nationality` = ? WHERE `id` = ?", name, nationality, author_id
     {datail: "ok"}.to_json
   else
-    # TODO response status 500
-    {datail: "no action"}.to_json
+    env.response.status_code = 404
   end
 end
 
