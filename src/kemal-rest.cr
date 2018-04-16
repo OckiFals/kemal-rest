@@ -31,7 +31,6 @@ get "/author" do |env|
 end
 
 post "/author" do |env|
-
   if env.params.json.has_key?("name") && env.params.json.has_key?("nationality")
     db.exec "INSERT INTO `author` (name, nationality) values (?, ?)", env.params.json["name"], env.params.json["nationality"]
     {datail: "ok"}.to_json
@@ -43,7 +42,6 @@ end
 
 get "/author/:id" do |env|
   author_id = env.params.url["id"]
-
   author = db.query_one? "SELECT * FROM `author` WHERE `id` = ?", author_id, as:{Int32, String, String}
 
   if author
