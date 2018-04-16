@@ -30,6 +30,7 @@ get "/author" do |env|
 end
 
 post "/author" do |env|
+  env.response.content_type = "application/json"
   if env.params.json.has_key?("name") && env.params.json.has_key?("nationality")
     db.exec "INSERT INTO `author` (name, nationality) values (?, ?)", env.params.json["name"], env.params.json["nationality"]
     {datail: "ok"}.to_json
@@ -54,6 +55,7 @@ get "/author/:id" do |env|
 end
 
 put "/author/:id" do |env|
+  env.response.content_type = "application/json"
   if env.params.json.has_key?("name") || env.params.json.has_key?("nationality")
     db.exec "UPDATE `author` SET `name`=? WHERE `id`=?", env.params.json["name"], env.params.url["id"]
     {datail: "ok"}.to_json
