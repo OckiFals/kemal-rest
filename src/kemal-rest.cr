@@ -21,7 +21,12 @@ get "/author" do |env|
   end
 
   env.response.content_type = "application/json"
-  results.to_json
+
+  if results.empty?
+    {datail: "no data"}.to_json
+  else
+    results.to_json
+  end
 end
 
 post "/author" do |env|
