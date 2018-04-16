@@ -1,0 +1,21 @@
+name: kemal-rest
+version: 0.1.0
+
+authors:
+  - Ocki Bagus Pratama <ocki.bagus.p@gmail.com>
+
+targets:
+  kemal-rest:
+    main: src/kemal-rest.cr
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal
+  db:
+    github: crystal-lang/crystal-db
+  mysql:
+    github: crystal-lang/crystal-mysql
+
+crystal: 0.24.2
+
+license: MIT
