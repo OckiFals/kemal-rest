@@ -6,8 +6,11 @@ require "kemal"
 
 db = DB.open "mysql://ockifals:admin123@localhost:3306/kemal-rest"
 
-get "/" do |env|
+before_all do |env|
   env.response.content_type = "application/json"
+end
+
+get "/" do |env|
   {datail: "Kemal RESTful CRUD", author: "Ocki Bagus Pratama", email: "ocki.bagus.p@gmail.com"}.to_json
 end
 
@@ -20,8 +23,6 @@ get "/author" do |env|
     results << {id: author[0], name: author[1], nationality: author[2]}
   end
 
-  env.response.content_type = "application/json"
-
   if results.empty?
     {datail: "no data"}.to_json
   else
@@ -30,7 +31,7 @@ get "/author" do |env|
 end
 
 post "/author" do |env|
-  env.response.content_type = "application/json"
+
   if env.params.json.has_key?("name") && env.params.json.has_key?("nationality")
     db.exec "INSERT INTO `author` (name, nationality) values (?, ?)", env.params.json["name"], env.params.json["nationality"]
     {datail: "ok"}.to_json
@@ -45,7 +46,6 @@ get "/author/:id" do |env|
 
   author = db.query_one? "SELECT * FROM `author` WHERE `id` = ?", author_id, as:{Int32, String, String}
 
-  env.response.content_type = "application/json"
   if author
     {id: author[0], name: author[1]}.to_json
   else
@@ -55,7 +55,6 @@ get "/author/:id" do |env|
 end
 
 put "/author/:id" do |env|
-  env.response.content_type = "application/json"
   if env.params.json.has_key?("name") || env.params.json.has_key?("nationality")
     db.exec "UPDATE `author` SET `name`=? WHERE `id`=?", env.params.json["name"], env.params.url["id"]
     {datail: "ok"}.to_json
