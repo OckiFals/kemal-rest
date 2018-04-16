@@ -45,7 +45,7 @@ get "/author/:id" do |env|
   author = db.query_one? "SELECT * FROM `author` WHERE `id` = ?", author_id, as:{Int32, String, String}
 
   if author
-    {id: author[0], name: author[1]}.to_json
+    {id: author[0], name: author[1], nationality: author[2]}.to_json
   else
     # TODO response status 404
     {detail: "Not Found"}.to_json
