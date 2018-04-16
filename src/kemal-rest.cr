@@ -33,6 +33,7 @@ end
 post "/author" do |env|
   if env.params.json.has_key?("name") && env.params.json.has_key?("nationality")
     db.exec "INSERT INTO `author` (name, nationality) values (?, ?)", env.params.json["name"], env.params.json["nationality"]
+    env.response.status_code = 201
     {datail: "ok"}.to_json
   else
     # TODO response status 500
@@ -47,8 +48,7 @@ get "/author/:id" do |env|
   if author
     {id: author[0], name: author[1], nationality: author[2]}.to_json
   else
-    # TODO response status 404
-    {detail: "Not Found"}.to_json
+    env.response.status_code = 404
   end
 end
 
@@ -60,6 +60,16 @@ put "/author/:id" do |env|
     # TODO response status 500
     {datail: "no action"}.to_json
   end
+end
+
+error 400 do |env|
+  env.response.content_type = "application/json"
+  {status: "error", message: "bad_request"}.to_json
+end
+
+error 404 do |env|
+  env.response.content_type = "application/json"
+  {status: "error", message: "not_found"}.to_json
 end
 
 Kemal.run
