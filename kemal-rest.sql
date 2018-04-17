@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 17, 2018 at 04:40 AM
+-- Generation Time: Apr 17, 2018 at 05:00 AM
 -- Server version: 5.7.21
 -- PHP Version: 7.1.14
 
@@ -32,8 +32,8 @@ CREATE TABLE `author` (
   `id` bigint(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `nationality` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -46,7 +46,9 @@ CREATE TABLE `book` (
   `id` bigint(11) NOT NULL,
   `author_id` bigint(11) NOT NULL,
   `title` varchar(255) NOT NULL,
-  `year` year(4) NOT NULL
+  `year` year(4) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
