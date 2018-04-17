@@ -28,7 +28,7 @@ post "/author" do |env|
     author.nationality = env.params.json["nationality"].to_s
     author.save
     env.response.status_code = 201
-    {datail: "ok"}.to_json
+    author.to_json
   else
     # TODO response status 500
     {datail: "not ok"}.to_json
@@ -57,7 +57,7 @@ put "/author/:id" do |env|
       author.nationality = env.params.json["nationality"]?.to_s
     end
     author.save
-    {datail: "ok"}.to_json
+    author.to_json
   else
     env.response.status_code = 404
   end
