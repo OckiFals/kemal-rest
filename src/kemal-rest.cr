@@ -1,11 +1,7 @@
 require "./kemal-rest/*"
 require "./models/*"
 
-require "db"
-require "mysql"
 require "kemal"
-
-db = DB.open "mysql://ockifals:admin123@localhost:3306/kemal-rest"
 
 before_all do |env|
   env.response.content_type = "application/json"
@@ -78,4 +74,3 @@ error 404 do |env|
 end
 
 Kemal.run
-db.close
