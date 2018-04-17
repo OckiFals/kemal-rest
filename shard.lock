@@ -4,6 +4,10 @@ shards:
     github: crystal-lang/crystal-db
     version: 0.5.0
 
+  granite_orm:
+    github: amberframework/granite
+    version: 0.9.1
+
   kemal:
     github: kemalcr/kemal
     version: 0.22.0

@@ -1,4 +1,5 @@
 require "./kemal-rest/*"
+require "./models/*"
 
 require "db"
 require "mysql"
@@ -15,24 +16,21 @@ get "/" do |env|
 end
 
 get "/author" do |env|
-  results = [] of {id: Int32, name: String, nationality: String}
+  authors = Author.all
 
-  fs = db.query_all "SELECT * FROM `author`", as:{Int32, String, String}
-
-  fs.each do |author|
-    results << {id: author[0], name: author[1], nationality: author[2]}
-  end
-
-  if results.empty?
+  if authors.empty?
     {datail: "no data"}.to_json
   else
-    results.to_json
+    authors.to_json
   end
 end
 
 post "/author" do |env|
   if env.params.json.has_key?("name") && env.params.json.has_key?("nationality")
-    db.exec "INSERT INTO `author` (name, nationality) values (?, ?)", env.params.json["name"], env.params.json["nationality"]
+    author = Author.new
+    author.name = env.params.json["name"].to_s
+    author.nationality = env.params.json["nationality"].to_s
+    author.save
     env.response.status_code = 201
     {datail: "ok"}.to_json
   else
@@ -42,25 +40,27 @@ post "/author" do |env|
 end
 
 get "/author/:id" do |env|
-  author_id = env.params.url["id"]
-  author = db.query_one? "SELECT * FROM `author` WHERE `id` = ?", author_id, as:{Int32, String, String}
+  author = Author.find env.params.url["id"]
 
   if author
-    {id: author[0], name: author[1], nationality: author[2]}.to_json
+    author.to_json
   else
     env.response.status_code = 404
   end
 end
 
 put "/author/:id" do |env|
-  author_id = env.params.url["id"]
-  author = db.query_one? "SELECT * FROM `author` WHERE `id` = ?", author_id, as:{Int32, String, String}
+  author = Author.find env.params.url["id"]
 
   if author
-    name = env.params.json.has_key?("name") ? env.params.json["name"] : author[1]
-    puts name
-    nationality = env.params.json.has_key?("nationality") ? env.params.json["nationality"] : author[1]
-    db.exec "UPDATE `author` SET `name` = ?, `nationality` = ? WHERE `id` = ?", name, nationality, author_id
+    if env.params.json.has_key?("name")
+      author.name = env.params.json["name"]?.to_s
+    end
+
+    if env.params.json.has_key?("nationality")
+      author.nationality = env.params.json["nationality"]?.to_s
+    end
+    author.save
     {datail: "ok"}.to_json
   else
     env.response.status_code = 404
