@@ -30,8 +30,7 @@ post "/author" do |env|
     env.response.status_code = 201
     author.to_json
   else
-    # TODO response status 500
-    {datail: "not ok"}.to_json
+    env.response.status_code = 400
   end
 end
 
