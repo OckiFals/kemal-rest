@@ -11,7 +11,7 @@ before_all do |env|
 end
 
 get "/" do |env|
-  {datail: "Kemal RESTful CRUD", author: "Ocki Bagus Pratama", email: "ocki.bagus.p@gmail.com"}.to_json
+  {detail: "Kemal RESTful CRUD", author: "Ocki Bagus Pratama", email: "ocki.bagus.p@gmail.com"}.to_json
 end
 
 get "/author" do |env|
@@ -24,7 +24,7 @@ get "/author" do |env|
   end
 
   if results.empty?
-    {datail: "no data"}.to_json
+    {detail: "no data"}.to_json
   else
     results.to_json
   end
@@ -34,10 +34,10 @@ post "/author" do |env|
   if env.params.json.has_key?("name") && env.params.json.has_key?("nationality")
     db.exec "INSERT INTO `author` (name, nationality) values (?, ?)", env.params.json["name"], env.params.json["nationality"]
     env.response.status_code = 201
-    {datail: "ok"}.to_json
+    {detail: "ok"}.to_json
   else
     # TODO response status 500
-    {datail: "not ok"}.to_json
+    {detail: "not ok"}.to_json
   end
 end
 
@@ -61,7 +61,7 @@ put "/author/:id" do |env|
     puts name
     nationality = env.params.json.has_key?("nationality") ? env.params.json["nationality"] : author[1]
     db.exec "UPDATE `author` SET `name` = ?, `nationality` = ? WHERE `id` = ?", name, nationality, author_id
-    {datail: "ok"}.to_json
+    {detail: "ok"}.to_json
   else
     env.response.status_code = 404
   end
